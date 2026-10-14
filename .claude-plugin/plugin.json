@@ -1,13 +1,14 @@
 {
   "name": "dotfile",
-  "version": "2026.10.121314",
+  "version": "2026.10.140936",
   "description": "Work on your Dotfile KYC and KYB workspace from your assistant: brief cases and their history, audit screening, identity verification and documents, follow team load and explain your configuration.",
   "author": {
     "name": "Dotfile",
     "url": "https://www.dotfile.com"
   },
   "homepage": "https://www.dotfile.com",
-  "repository": "https://github.com/dotfile/dotfile-plugin",
+  "repository": "https://github.com/DotfileTech/dotfile-plugin",
+  "license": "MIT",
   "keywords": [
     "kyc",
     "kyb",
