@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the plugin ZIP
+        run: git archive --format=zip --output dotfile-plugin.zip HEAD -- . ':(exclude).github'
+
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(jq -r .version .codex-plugin/plugin.json)
+          tag="v${version}"
+          # A commit that keeps the version refreshes that release's ZIP instead of creating a new release.
+          if gh release view "$tag" > /dev/null 2>&1; then
+            gh release upload "$tag" dotfile-plugin.zip --clobber
+          else
+            gh release create "$tag" dotfile-plugin.zip \
+              --target "$GITHUB_SHA" \
+              --title "$version" \
+              --notes "$(git log -1 --format=%s)" \
+              --latest
+          fi
