@@ -15,5 +15,10 @@
     "compliance",
     "aml",
     "onboarding"
-  ]
+  ],
+  "icon": "./assets/logo.png",
+  "documentationUrl": "https://docs.dotfile.com/docs/mcp-connector",
+  "supportUrl": "https://docs.dotfile.com/docs/introduction",
+  "privacyPolicyUrl": "https://www.dotfile.com/privacy",
+  "termsOfServiceUrl": "https://www.dotfile.com/terms"
 }
