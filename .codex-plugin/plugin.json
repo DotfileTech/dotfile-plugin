@@ -1,6 +1,6 @@
 {
   "name": "dotfile",
-  "version": "2026.10.201322",
+  "version": "2026.10.271356",
   "description": "Work on your Dotfile KYC and KYB workspace from your assistant: brief cases and their history, audit screening, identity verification and documents, follow team load and explain your configuration.",
   "author": {
     "name": "Dotfile",
@@ -43,5 +43,60 @@
     "composerIconDark": "./assets/logo-dark.png",
     "logo": "./assets/logo.png",
     "logoDark": "./assets/logo-dark.png"
+  },
+  "extensions": {
+    "com.openai": {
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "A compliance analyst prepares a review meeting and needs a status brief on one open case.",
+              "prompt": "Where does the Brightwater Capital case stand, and what is blocking it?",
+              "tools_triggered": "list_workspaces, query_entities, get_check, list_case_controls, list_notes",
+              "expected_behavior": "Reports the case status and risk from the current data, identifies pending documents and relevant notes, and proposes a next action grounded in those records. Includes a link to the case."
+            },
+            {
+              "description": "A team lead triages the open cases to decide which ones to review first.",
+              "prompt": "Which open cases have the highest risk?",
+              "tools_triggered": "list_workspaces, query_entities",
+              "expected_behavior": "Lists open cases from the connected workspace in descending risk order, with a link to each case. Uses the stored risk values and does not invent missing assessments."
+            },
+            {
+              "description": "A team lead checks how open cases are spread across analysts before reassigning work.",
+              "prompt": "How is the open-case workload spread across the team?",
+              "tools_triggered": "list_workspaces, query_entities, list_workspace_members",
+              "expected_behavior": "Counts open cases per assignee from the current workspace data, includes any unassigned cases, and presents a workload summary without changing assignments."
+            },
+            {
+              "description": "An auditor reviews how a closed case was decided.",
+              "prompt": "Show me the history of the Atelier Verlaine case.",
+              "tools_triggered": "list_workspaces, query_entities, get_entity_timeline",
+              "expected_behavior": "Summarises the recorded case history chronologically, including its decision and any decision comment returned by the tools. Includes a link to the case and does not invent events."
+            },
+            {
+              "description": "An analyst records new information on a case without leaving the conversation.",
+              "prompt": "Add a note on the Nordlicht case: proof of address received by email, upload pending.",
+              "tools_triggered": "list_workspaces, query_entities, add_note",
+              "expected_behavior": "Finds the Nordlicht Logistik case, adds a note containing the requested text, and confirms with a link to that case. Does not upload a document or change a check status."
+            }
+          ],
+          "negative": [
+            {
+              "description": "An off-topic travel request is outside the plugin capabilities. The assistant should call no Dotfile tool and explain that flight booking is unavailable through Dotfile.",
+              "prompt": "Book me a flight to Lisbon next Friday."
+            },
+            {
+              "description": "The user requests data outside the connected account. The assistant must limit any results to accessible workspaces and explain that it cannot access other customers. It must not disclose cross-workspace data.",
+              "prompt": "Show me the cases of every workspace on Dotfile, including other customers."
+            },
+            {
+              "description": "Resetting another user's MFA is not exposed by this connector. The assistant should call no tool to perform the reset, explain the limitation, and direct the user to an authorised administrator.",
+              "prompt": "Reset the MFA of another user in our workspace."
+            }
+          ]
+        },
+        "demo_recording_url": "https://drive.google.com/file/d/19jwD4pSKllZbqa90-lM5w9IgvvRfvl32/view?usp=sharing"
+      }
+    }
   }
 }
